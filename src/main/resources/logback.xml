@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- For assistance related to logback-translator or configuration  -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user             -->
+<!--                                                                -->
+<!-- For professional support please see                            -->
+<!--    http://www.qos.ch/shop/products/professionalSupport         -->
+<!-- ĂłĹ‚Ĺ„             Ĺ‚Ĺ„Ĺ›Ä™Ä…                                          -->
+<configuration  scan="true" scanPeriod="30 seconds">
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
+        <encoder>
+            <pattern>%d{ISO8601} [%thread] %highlight(%-5p) %cyan(%c{20}).%M - %message %n</pattern>
+            <!--<pattern>[%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg %n</pattern>-->
+        </encoder>
+    </appender>
+
+    <appender name="rootAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>log/root.log</File>
+        <encoder>
+            <pattern>%d{ISO8601} [%thread] %-5p %c - %message%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>log/root.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="eaAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <File>log/eaconnector.log</File>
+        <encoder>
+            <pattern>%d{ISO8601} [%thread] %-5p %c.%M- %message%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>log/eaconnector.log.%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="rootAppender"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <logger name="org.hibernate.type" level="INFO" additivity="false">
+        <appender-ref ref="rootAppender"/>
+    </logger>
+
+    <logger name="org.hibernate.SQL" level="INFO" additivity="false">
+        <appender-ref ref="rootAppender"/>
+    </logger>
+
+    <logger name="com.cgi.tools.eaconnector" level="DEBUG" additivity="false">
+        <appender-ref ref="eaAppender"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+</configuration>
